@@ -1,0 +1,200 @@
+Find `k` closest elements to a given value in an array
+
+public static List<Integer> findKClosestElements(int[] nums, int k, int target)
+    {
+        int left = 0;
+        int right = nums.length - 1;
+ 
+        while (right - left >= k)
+        {
+            if (Math.abs(nums[left] - target) > Math.abs(nums[right] - target)) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+ 
+        return Arrays.stream(nums, left, right + 1).boxed()
+                .collect(Collectors.toList());
+    }
+ 
+ -----------------------------------------------
+ 
+ Division of two numbers using binary search algorithm
+ 
+ public static double divide(double x, double y)
+    {
+        // handle divisibility by 0
+        if (y == 0) {
+            return Double.MAX_VALUE;        // return INFINITY
+        }
+ 
+        // Set range for result [left, right].
+        // `right` is set to INFINITY to handle the case
+        // when `y < 1`, and `x < result < Double.MAX_VALUE`
+        double left = 0.0, right = Double.MAX_VALUE;
+ 
+        // set accuracy of the result
+        double precision = 0.001;
+ 
+        // store sign of the result
+        int sign = 1;
+        if (x * y < 0) {
+            sign = -1;
+        }
+ 
+        // make both input numbers positive
+        x = Math.abs(x);
+        y = Math.abs(y);
+ 
+        while (true)
+        {
+            // calculate mid
+            double mid = left + ((right - left) / 2);
+ 
+            // if `y×mid` is almost equal to `x`, return `mid`
+            if (Math.abs(y * mid - x) <= precision) {
+                return mid * sign;
+            }
+ 
+            // if `y×mid` is less than `x`, update `left` to `mid`
+            if (y * mid < x) {
+                left = mid;
+            }
+            else {
+                // if `y×mid` is more than `x`, update `right` to `mid`
+                right = mid;
+            }
+        }
+    }
+    
+    ---------------------------------------------
+    
+    Find the frequency of each element in a sorted array containing duplicates
+    
+    class Main
+{
+    // Function to find the frequency of each element in a sorted array
+    public static void findFrequency(int[] nums, int left, int right,
+                                    Map<Integer, Integer> freq)
+    {
+        if (left > right) {
+            return;
+        }
+ 
+        // if every element in subarray nums[left…right] is equal,
+        // then increment the element's count by `n`
+        if (nums[left] == nums[right])
+        {
+            Integer count = freq.get(nums[left]);
+            if (count == null) {
+                count = 0;
+            }
+ 
+            freq.put(nums[left], count + (right - left + 1));
+            return;
+        }
+ 
+        int mid = (left + right)/2;
+ 
+        // divide the array into left and right subarray and recur
+        findFrequency(nums, left, mid, freq);
+        findFrequency(nums, mid + 1, right, freq);
+    }
+ 
+    public static void main(String[] args)
+    {
+        int[] nums = { 2, 2, 2, 4, 4, 4, 5, 5, 6, 8, 8, 9 };
+ 
+        // find the frequency of each array element and store it in a map
+        Map<Integer, Integer> freq = new HashMap<>();
+        findFrequency(nums, 0, nums.length - 1, freq);
+ 
+        System.out.println(freq);
+    }
+}
+
+-------------------------------------------------
+
+Binary Search - Iterative Implementation
+
+public static int binarySearch(int[] nums, int target)
+    {
+        // search space is nums[left…right]
+        int left = 0, right = nums.length - 1;
+ 
+        // loop till the search space is exhausted
+        while (left <= right)
+        {
+            // find the mid-value in the search space and
+            // compares it with the target
+ 
+            int mid = (left + right) / 2;
+ 
+            // overflow can happen. Use:
+            // int mid = left + (right - left) / 2;
+            // int mid = right - (right - left) / 2;
+ 
+            // target is found
+            if (target == nums[mid]) {
+                return mid;
+            }
+ 
+            // discard all elements in the right search space,
+            // including the middle element
+            else if (target < nums[mid]) {
+                right = mid - 1;
+            }
+ 
+            // discard all elements in the left search space,
+            // including the middle element
+            else {
+                left = mid + 1;
+            }
+        }
+ 
+        // `target` doesn't exist in the array
+        return -1;
+    }
+    
+    ---------------------------------------------
+    
+    Binary Search - Recursive 
+    
+    public static int binarySearch(int[] nums, int left, int right, int target)
+    {
+        // Base condition (search space is exhausted)
+        if (left > right) {
+            return -1;
+        }
+ 
+        // find the mid-value in the search space and
+        // compares it with the target
+ 
+        int mid = (left + right) / 2;
+ 
+        // overflow can happen. Use below
+        // int mid = left + (right - left) / 2;
+ 
+        // Base condition (a target is found)
+        if (target == nums[mid]) {
+            return mid;
+        }
+ 
+        // discard all elements in the right search space,
+        // including the middle element
+        else if (target < nums[mid]) {
+            return binarySearch(nums, left, mid - 1, target);
+        }
+ 
+        // discard all elements in the left search space,
+        // including the middle element
+        else {
+            return binarySearch(nums, mid + 1, right, target);
+        }
+    }
+    
+    -------------------------------------
+    
+    
